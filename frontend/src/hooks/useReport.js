@@ -107,17 +107,16 @@ export function useReport() {
     async (format = "pdf") => {
       if (!taskId) return;
       try {
-        await downloadReport(taskId, format);
-        // TODO: when downloadReport returns a blob, create an object URL and trigger download:
-        // const url = URL.createObjectURL(blob);
-        // const a = document.createElement("a"); a.href = url; a.download = `report.${format}`; a.click();
-        alert(`Скачивание ${format.toUpperCase()} будет доступно после подключения бэкенда.`);
+        const blob = await downloadReport(taskId, format);
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `report.${format}`;
+        a.click();
+        URL.revokeObjectURL(url);
       } catch (err) {
         setReportError(err.message ?? "Ошибка при скачивании отчёта");
       }
-    },
-    [taskId]
-  );
 
   return {
     taskId,
