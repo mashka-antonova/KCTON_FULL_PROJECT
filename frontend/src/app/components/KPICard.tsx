@@ -16,22 +16,22 @@ interface KPICardProps {
 
 const colorMap = {
   "neon-blue": {
-    text: "text-blue-400",
+    text: "text-blue-600 dark:text-blue-400",
     gradient: ["#60A5FA", "rgba(96,165,250,0)"],
     stroke: "#60A5FA",
   },
   "neon-mint": {
-    text: "text-emerald-400",
+    text: "text-emerald-600 dark:text-emerald-400",
     gradient: ["#34D399", "rgba(52,211,153,0)"],
     stroke: "#34D399",
   },
   "neon-coral": {
-    text: "text-rose-400",
+    text: "text-rose-600 dark:text-rose-400",
     gradient: ["#FB7185", "rgba(251,113,133,0)"],
     stroke: "#FB7185",
   },
   neutral: {
-    text: "text-slate-300",
+    text: "text-slate-500 dark:text-slate-300",
     gradient: ["#94A3B8", "rgba(148,163,184,0)"],
     stroke: "#94A3B8",
   },
@@ -39,7 +39,7 @@ const colorMap = {
 
 function SkeletonPulse({ className }: { className?: string }) {
   return (
-    <div className={cn("animate-pulse bg-white/10 rounded", className)} />
+    <div className={cn("animate-pulse bg-slate-200 dark:bg-white/10 rounded", className)} />
   );
 }
 
@@ -67,9 +67,9 @@ export function KPICard({ title, value, change, data = [], color, unit, isLoadin
   }
 
   return (
-    <BentoCard className="p-5 flex flex-col justify-between group cursor-default hover:border-white/20 transition-colors h-[160px]">
+    <BentoCard className="p-5 flex flex-col justify-between group cursor-default hover:border-slate-300 dark:hover:border-white/20 transition-colors h-[160px]">
       {data.length > 0 && (
-        <div className="absolute inset-x-0 bottom-0 h-2/3 opacity-30 pointer-events-none">
+        <div className="absolute inset-x-0 bottom-0 h-2/3 opacity-20 dark:opacity-30 pointer-events-none">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={data}>
               <defs>
@@ -92,8 +92,10 @@ export function KPICard({ title, value, change, data = [], color, unit, isLoadin
       )}
 
       <div className="relative z-10">
-        <p className="text-sm font-medium text-slate-400 mb-1">{title}</p>
-        <h2 className="text-3xl font-bold tracking-tight text-white font-sans">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1.5">
+          {title}
+        </p>
+        <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white font-sans leading-none">
           {displayValue}
         </h2>
       </div>
@@ -101,22 +103,26 @@ export function KPICard({ title, value, change, data = [], color, unit, isLoadin
       <div className="relative z-10 flex items-center gap-1 mt-auto">
         {displayChange !== null ? (
           <>
-            {isPositive && <TrendingUp className="w-4 h-4 text-emerald-400" />}
-            {isNegative && <TrendingDown className="w-4 h-4 text-rose-400" />}
-            {isNeutral && <Minus className="w-4 h-4 text-slate-400" />}
+            {isPositive && <TrendingUp className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />}
+            {isNegative && <TrendingDown className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400 shrink-0" />}
+            {isNeutral && <Minus className="w-3.5 h-3.5 text-slate-400 shrink-0" />}
             <span
               className={cn(
                 "text-sm font-semibold",
-                isPositive ? "text-emerald-400" : isNegative ? "text-rose-400" : "text-slate-400"
+                isPositive
+                  ? "text-emerald-600 dark:text-emerald-400"
+                  : isNegative
+                  ? "text-rose-600 dark:text-rose-400"
+                  : "text-slate-400"
               )}
             >
               {displayChange > 0 ? "+" : ""}
               {displayChange}%
             </span>
-            <span className="text-xs text-slate-500 ml-1">к прошлому году</span>
+            <span className="text-xs text-slate-400 dark:text-slate-500 ml-1">к прошлому году</span>
           </>
         ) : (
-          <span className="text-xs text-slate-500">нет данных об изменении</span>
+          <span className="text-xs text-slate-400 dark:text-slate-500">нет данных об изменении</span>
         )}
       </div>
     </BentoCard>
