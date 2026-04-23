@@ -111,11 +111,12 @@ interface MapSectionProps {
 /** Renders the PopulationMap + LeaderList side-by-side layout. */
 function MapSection({ topDynamics, isLoading }: MapSectionProps) {
   return (
-    <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 min-h-[560px]">
-      <div className="lg:col-span-8 flex">
+    <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 min-h-[520px]">
+      {/* Map takes 2/3 of the width; h-full ensures PopulationMap fills the row */}
+      <div className="lg:col-span-8 h-full min-h-[480px]">
         <PopulationMap />
       </div>
-      <div className="lg:col-span-4 flex flex-col gap-4">
+      <div className="lg:col-span-4 flex flex-col gap-4 min-h-[480px]">
         <LeaderList
           growthData={topDynamics.growth}
           declineData={topDynamics.decline}
