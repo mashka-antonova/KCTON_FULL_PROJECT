@@ -8,8 +8,10 @@ const BentoCard = React.forwardRef<HTMLDivElement, CardProps>(
     <div
       ref={ref}
       className={cn(
-        "rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-xl shadow-lg relative overflow-hidden",
-        "shadow-[inset_0_0_20px_rgba(255,255,255,0.02)]",
+        // Light mode: clean white card with soft shadow and defined border
+        "rounded-2xl bg-white border border-slate-200 shadow-sm relative overflow-hidden",
+        // Dark mode: glass card matching original design
+        "dark:bg-white/[0.04] dark:border-white/10 dark:shadow-[inset_0_0_20px_rgba(255,255,255,0.02)] dark:backdrop-blur-xl",
         className
       )}
       {...props}

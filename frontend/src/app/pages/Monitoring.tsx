@@ -1,12 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { Header } from "../components/Header";
 import { KPICard } from "../components/KPICard";
-import { Heatmap } from "../components/Heatmap";
+import { PopulationMap } from "../components/PopulationMap";
 import { LeaderList } from "../components/LeaderList";
 import { useFilters } from "../../hooks/useFilters";
 import {
   fetchMonitoringSummary,
-  fetchHeatmapData,
   fetchTopDynamics,
 } from "../../api/monitoring";
 import { getErrorMessage } from "../../utils/errorHandler";
@@ -16,7 +15,7 @@ import {
   buildFlatSparkline,
   buildGentleRisingSparkline,
 } from "../../utils/dataHelpers";
-import type { MonitoringSummary, TopDynamics, GeoData } from "../../types";
+import type { MonitoringSummary, TopDynamics } from "../../types";
 
 // Sparklines are static – generated once per mount, not tied to API data
 const sparklineBlue = buildRisingSparkline();
@@ -29,8 +28,8 @@ function Toast({ message, type }: { message: string; type: "error" | "info" }) {
     <div
       className={`fixed bottom-6 right-6 z-50 px-5 py-3 rounded-xl border shadow-xl backdrop-blur-md text-sm font-medium max-w-sm ${
         type === "error"
-          ? "bg-rose-900/80 border-rose-500/40 text-rose-200"
-          : "bg-slate-800/90 border-white/10 text-slate-200"
+          ? "bg-rose-50 border-rose-200 text-rose-700 dark:bg-rose-900/80 dark:border-rose-500/40 dark:text-rose-200"
+          : "bg-white border-slate-200 text-slate-700 dark:bg-slate-800/90 dark:border-white/10 dark:text-slate-200"
       }`}
     >
       {message}
@@ -55,7 +54,7 @@ interface KPISectionProps {
 /** Renders the row of 5 KPI metric cards. */
 function KPISection({ summary, isLoading }: KPISectionProps) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 shrink-0">
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 shrink-0">
       <KPICard
         title="Численность населения"
         value={summary ? formatValue(summary.population) : null}
@@ -105,19 +104,18 @@ function KPISection({ summary, isLoading }: KPISectionProps) {
 }
 
 interface MapSectionProps {
-  geoData: GeoData | null;
   topDynamics: TopDynamics;
   isLoading: boolean;
 }
 
-/** Renders the Heatmap + LeaderList side-by-side layout. */
-function MapSection({ geoData, topDynamics, isLoading }: MapSectionProps) {
+/** Renders the PopulationMap + LeaderList side-by-side layout. */
+function MapSection({ topDynamics, isLoading }: MapSectionProps) {
   return (
-    <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[600px]">
+    <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 min-h-[560px]">
       <div className="lg:col-span-8 flex">
-        <Heatmap geoData={geoData} isLoading={isLoading && !geoData} />
+        <PopulationMap />
       </div>
-      <div className="lg:col-span-4 flex flex-col gap-6">
+      <div className="lg:col-span-4 flex flex-col gap-4">
         <LeaderList
           growthData={topDynamics.growth}
           declineData={topDynamics.decline}
@@ -134,7 +132,6 @@ export function Monitoring() {
   const filters = useFilters();
 
   const [summary, setSummary] = useState<MonitoringSummary | null>(null);
-  const [geoData, setGeoData] = useState<GeoData | null>(null);
   const [topDynamics, setTopDynamics] = useState<TopDynamics>({ growth: [], decline: [] });
   const [isLoadingData, setIsLoadingData] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: "error" | "info" } | null>(null);
@@ -145,8 +142,8 @@ export function Monitoring() {
   }, []);
 
   /**
-   * Fetches summary, heatmap, and top-dynamics in parallel.
-   * Called on initial load and whenever the user clicks "Показать".
+   * Fetches summary and top-dynamics in parallel.
+   * The choropleth map (PopulationMap) loads its own data from the static GeoJSON.
    */
   const loadData = useCallback(
     async (params: {
@@ -157,13 +154,11 @@ export function Monitoring() {
     }) => {
       setIsLoadingData(true);
       try {
-        const [summaryData, heatmap, dynamics] = await Promise.all([
+        const [summaryData, dynamics] = await Promise.all([
           fetchMonitoringSummary(params),
-          fetchHeatmapData({ startYear: params.startYear, endYear: params.endYear, regionId: params.regionId }),
           fetchTopDynamics({ startYear: params.startYear, endYear: params.endYear, regionId: params.regionId }),
         ]);
         setSummary(summaryData);
-        setGeoData(heatmap);
         setTopDynamics(dynamics);
       } catch (err: any) {
         showToast(getErrorMessage(err));
@@ -219,10 +214,10 @@ export function Monitoring() {
         isLoadingData={isLoadingData}
       />
 
-      <main className="flex-1 overflow-auto p-6 md:p-8 custom-scrollbar">
-        <div className="max-w-[1600px] mx-auto flex flex-col gap-6 h-full min-h-[900px]">
+      <main className="flex-1 overflow-auto p-5 md:p-6 custom-scrollbar">
+        <div className="max-w-[1600px] mx-auto flex flex-col gap-4 h-full min-h-[860px]">
           <KPISection summary={summary} isLoading={isLoadingData} />
-          <MapSection geoData={geoData} topDynamics={topDynamics} isLoading={isLoadingData} />
+          <MapSection topDynamics={topDynamics} isLoading={isLoadingData} />
         </div>
       </main>
 

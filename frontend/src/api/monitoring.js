@@ -43,7 +43,7 @@ export async function fetchMonitoringSummary({ startYear = 2020, endYear = 2024,
 }
 
 // TODO: Заменить на GET /api/monitoring/heatmap?start_year=...&end_year=...&region_id=...
-export async function fetchTopDynamics({ startYear = 2020, endYear = 2024, regionId } = {}) {
+export async function fetchHeatmapData({ startYear = 2020, endYear = 2024, regionId } = {}) {
   let url = `/api/monitoring/heatmap?start_year=${startYear}&end_year=${endYear}`;
   if (regionId) url += `&region_id=${regionId}`;
   return apiFetch(url);

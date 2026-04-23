@@ -117,6 +117,9 @@ export function useReport() {
       } catch (err) {
         setReportError(err.message ?? "Ошибка при скачивании отчёта");
       }
+    },
+    [taskId]
+  );
 
   return {
     taskId,
