@@ -74,13 +74,20 @@ export const PopulationMap = memo(function PopulationMap() {
           shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
         });
 
-        // Build 7-class quantile colour scale from actual data
+        // Build 9-class quantile colour scale from actual data.
+        // Custom palette extends OrRd into very dark burgundy/near-black
+        // so high-density regions (Moscow, SPb) stand out clearly.
         const densities = geo.features
           .map((f) => f.properties.density)
           .filter((d) => Number.isFinite(d) && d > 0);
 
-        const limits = chroma.limits(densities, "q", 7);
-        const scale = chroma.scale("OrRd").classes(limits);
+        const limits = chroma.limits(densities, "q", 9);
+        const scale = chroma
+          .scale([
+            "#FFF7EC", "#FEE8C8", "#FDD49E", "#FDBB84",
+            "#FC8D59", "#E34A33", "#B30000", "#7F0000", "#3D0000",
+          ])
+          .classes(limits);
         setLegend(buildLegend(limits, scale));
 
         const getColor = (d: number) =>

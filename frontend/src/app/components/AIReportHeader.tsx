@@ -61,23 +61,29 @@ export function AIReportHeader({
           <button
             onClick={onExportPDF}
             disabled={!isReportReady}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-3 py-2 rounded-xl
+              bg-stone-100 border border-stone-200 hover:bg-stone-200 text-stone-600
+              dark:bg-white/5 dark:border-white/10 dark:hover:bg-white/10 dark:text-slate-300
+              transition-colors text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed"
             aria-label="Скачать PDF"
           >
-            <FileDown className="w-4 h-4 text-rose-400" />
+            <FileDown className="w-4 h-4 text-rose-500 dark:text-rose-400" />
             PDF
           </button>
           <button
             onClick={onExportWord}
             disabled={!isReportReady}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-3 py-2 rounded-xl
+              bg-stone-100 border border-stone-200 hover:bg-stone-200 text-stone-600
+              dark:bg-white/5 dark:border-white/10 dark:hover:bg-white/10 dark:text-slate-300
+              transition-colors text-sm font-medium disabled:opacity-40 disabled:cursor-not-allowed"
             aria-label="Скачать DOCX"
           >
-            <FileText className="w-4 h-4 text-blue-400" />
+            <FileText className="w-4 h-4 text-blue-500 dark:text-blue-400" />
             DOCX
           </button>
 
-          <div className="w-px h-5 bg-white/10 mx-1" />
+          <div className="w-px h-5 bg-stone-200 dark:bg-white/10 mx-1" />
 
           <button
             onClick={onGenerate}
@@ -121,7 +127,7 @@ export function AIReportHeader({
           minWidth={180}
         />
 
-        <div className="w-px h-5 bg-white/10" />
+        <div className="w-px h-5 bg-stone-200 dark:bg-white/10" />
 
         <FilterSelect
           value={horizon}

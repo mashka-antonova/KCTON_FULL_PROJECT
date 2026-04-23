@@ -78,7 +78,7 @@ function KPISection({ summary, isLoading }: KPISectionProps) {
       <KPICard
         title="Рождаемость (на 1000)"
         value={summary?.birth_rate ?? null}
-        change={-1.2}
+        change={null}
         data={sparklineRed}
         color="neon-coral"
         isLoading={isLoading && !summary}
@@ -86,7 +86,7 @@ function KPISection({ summary, isLoading }: KPISectionProps) {
       <KPICard
         title="Смертность (на 1000)"
         value={summary?.death_rate ?? null}
-        change={-5.4}
+        change={null}
         data={sparklineGreen}
         color="neon-mint"
         isLoading={isLoading && !summary}
